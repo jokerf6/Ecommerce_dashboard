@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Category {
+  id         Int        @id @default(autoincrement())
+  nameAr     String
+  nameEn     String
+  image      String     @db.Text
+  isActive   Boolean    @default(false)
+  parentId   Int?
+  isFeatured Boolean    @default(false)
+  Parent     Category?  @relation("ParentChild", fields: [parentId], references: [id])
+  Children   Category[] @relation("ParentChild")
+  Product    Product[]
+  @@map("category")
+}
+
+model Banner {
+  id       Int     @id @default(autoincrement())
+  imageAr  String  @db.Text
+  imageEn  String  @db.Text
+  isActive Boolean @default(false)
+
+  @@map("banner")
+}
+
+model Product {
+  id           Int          @id @default(autoincrement())
+  nameAr       String
+  nameEn       String
+  descriptionAr String
+  descriptionEn String
+  image        String @db.Text
+  price        Int
+  discount     Int          @default(0)
+  discountType discountType
+  categoryId   Int
+  isActive     Boolean @default(false)
+  Category     Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+}
+
+enum discountType {
+  PERCENTAGE
+  AMOUNT
+}

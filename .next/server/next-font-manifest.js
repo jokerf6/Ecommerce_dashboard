@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/media/fahd/base2/frontend/Ecommerce_dashboard/src/app/layout\":[\"static/media/0fb5d54cc1f5e91d-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"
