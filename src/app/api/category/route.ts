@@ -1,13 +1,10 @@
 import { parseQueryParams } from "@/lib/queryParsed";
-import { GetLocale } from "@/static/getLocale";
-import { localizedObject } from "@/static/localizedObject";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
-  const locale = await GetLocale(req);
   const { limit, skip, filterObj, id } = parseQueryParams(req);
   try {
     let categories;
@@ -27,7 +24,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(
       {
         message: "Get Categories Successfully",
-        data: localizedObject(categories, locale),
+        data: categories,
       },
       { status: 200 }
     );
