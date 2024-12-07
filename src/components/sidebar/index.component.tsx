@@ -29,7 +29,7 @@ const items = [
   },
   {
     title: "Banners",
-    url: "#",
+    url: "/banners",
     icon: GalleryVerticalEnd,
   },
   {

@@ -30,8 +30,8 @@ model Category {
 
 model Banner {
   id       Int     @id @default(autoincrement())
-  imageAr  String  @db.Text
-  imageEn  String  @db.Text
+  title    String
+  image    String  @db.Text
   isActive Boolean @default(false)
 
   @@map("banner")

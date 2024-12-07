@@ -5,7 +5,6 @@ import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
 import {
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -39,7 +38,12 @@ export function ProfileForm(props: ProfileFormProps) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
         {fields.map(
           (
-            item: { name: string; label: string; placeholder: string },
+            item: {
+              name: string;
+              label: string;
+              placeholder: string;
+              type: string;
+            },
             idx: number
           ) => {
             return (
@@ -47,15 +51,21 @@ export function ProfileForm(props: ProfileFormProps) {
                 key={idx}
                 control={form.control}
                 name={item.name}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{item.label}</FormLabel>
-                    <FormControl>
-                      <Input placeholder={item.placeholder} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>{item.label}</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={item.placeholder}
+                          type={item.type}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
             );
           }

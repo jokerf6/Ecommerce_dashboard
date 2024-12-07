@@ -21,11 +21,12 @@ import { Overview } from "@/components/ui/overview";
 import { Search } from "@/components/ui/search";
 import { UserNav } from "@/components/ui/userNav";
 import RootLayout from "../layouts/layout";
+import DatePickerOverlay from "@/components/ui/dateOverlay";
 
 export default function DashboardPage() {
   return (
     <RootLayout>
-      <div className="md:hidden">
+      {/* <div className="md:hidden">
         <Image
           src="/examples/dashboard-light.png"
           width={1280}
@@ -175,7 +176,8 @@ export default function DashboardPage() {
             </TabsContent>
           </Tabs>
         </div>
-      </div>
+      </div> */}
+      <DatePickerOverlay />
     </RootLayout>
   );
 }

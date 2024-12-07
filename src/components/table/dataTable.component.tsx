@@ -30,13 +30,21 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { Switch } from "../ui/switch";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data: any[];
+  renderHeader?: (header: any) => React.ReactNode;
+  filter: {
+    label: string;
+    column: string;
+  };
 }
 export function DataTable<TData, TValue>({
   columns,
   data,
+  renderHeader,
+  filter,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -44,7 +52,6 @@ export function DataTable<TData, TValue>({
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
-
   const table = useReactTable({
     data,
     columns,
@@ -65,14 +72,21 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter emails..."
-          value={table.getColumn("email")?.getFilterValue() as string}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        {filter && filter.column && (
+          <Input
+            placeholder={`Filter ${filter!.label}...`}
+            value={
+              (table!.getColumn(filter!.column)?.getFilterValue() as string) ??
+              ""
+            }
+            onChange={(event) =>
+              table!
+                .getColumn(filter!.column)
+                ?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -110,6 +124,8 @@ export function DataTable<TData, TValue>({
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
+                        : renderHeader
+                        ? renderHeader(header) // Use custom renderHeader function if provided
                         : flexRender(
                             header.column.columnDef.header,
                             header.getContext()
@@ -127,14 +143,20 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <TableCell key={cell.id}>
+                        {cell.column.id !== "isActive" ? (
+                          flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )
+                        ) : (
+                          <Switch checked={row.original.isActive} />
+                        )}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             ) : (
